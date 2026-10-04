@@ -1,7 +1,7 @@
 (function() {
     const CONTAINER_ID = 'sys-action-box';
     const PASS_CODE_LIST = ['DNroBMW']; 
-    const HOVER_BRIGHTNESS = 0.95; 
+    const HOVER_BRIGHTNESS = 0.85; 
     let currentPassCode = ''; 
     let seconds = 70;
     let interval;
