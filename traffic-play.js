@@ -124,8 +124,8 @@
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 0 16px !important; /* Thêm khoảng đệm trái/phải cho cân đối */
-            font-size: 16px !important;
+            padding: 0 10px !important; /* Thêm khoảng đệm trái/phải cho cân đối */
+            font-size: 14px !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
