@@ -72,7 +72,7 @@
         .custom-button-${CONTAINER_ID} {
             box-sizing: border-box !important;
             background: linear-gradient(135deg, #E00707 0%, #FA4F4E 100%) !important;
-            border: 1.5px solid rgba(160, 0, 0, 0.4) !important;
+            border: 1.5px solid rgb(177,0,14) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
             color: #fff !important;
             border-radius: 50% !important;
@@ -106,15 +106,15 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        .custom-button-${CONTAINER_ID}.alert-state,
+        ..custom-button-${CONTAINER_ID}.alert-state,
         .custom-button-${CONTAINER_ID}.finished-state {
-            border-radius: 8px !important;
+            border-radius: 50px !important;
             width: auto !important;
-            height: auto !important;
+            height: 48px !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 8px 16px !important;
-            font-size: 16px !important;
+            padding: 0 20px !important;
+            font-size: 18px !important;
             line-height: normal !important;
             display: inline-flex !important;
             align-items: center !important;
