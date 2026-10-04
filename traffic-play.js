@@ -96,7 +96,6 @@
             font-size: 23px !important;
             line-height: 50px !important;
         }
-        /* [MỚI] Hiệu ứng rê chuột sậm màu lại một chút */
         .custom-button-${CONTAINER_ID}:hover {
             background: linear-gradient(180deg, #D93D3C 0%, #C00504 100%) !important;
             filter: brightness(0.9) !important;
@@ -236,8 +235,7 @@
             btn.style.cursor = 'pointer';
  
             btnText.innerHTML = `${currentPassCode} <svg viewBox="0 0 24 24" style="height: 18px !important; width: 18px !important; margin: -4px 0 0 6px !important; vertical-align: middle; display: inline-block; fill: #ffffff;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
-            btn.removeEventListener('click', checkIncognitoAndStart);
-            btn.addEventListener('click', copyCodeHandler);
+            btn.onclick = copyCodeHandler;
         }
     }
 
@@ -290,7 +288,7 @@
         btn.style.background = BASE_COLOR;
         btn.classList.add('disabled-state');
         btn.style.cursor = 'not-allowed';
-        btn.removeEventListener('click', checkIncognitoAndStart); 
+        btn.onclick = null; 
         updateCountdown();
         interval = setInterval(updateCountdown, 1000);
  
@@ -365,17 +363,17 @@
         });
     };
 
+    // Gán mặc định chạy bình thường trước
+    btn.onclick = checkIncognitoAndStart;
+
+    // Kiểm tra ẩn danh ngay lập tức và ghi đè sự kiện onclick nếu là tab ẩn danh
     detectIncognito().then((result) => {
         if (result.isPrivate) {
             btn.classList.add('disabled-state');
-            btn.style.cursor = 'not-allowed';
-            btn.removeEventListener('click', checkIncognitoAndStart);
-            btn.addEventListener('click', function(e) {
+            btn.onclick = function(e) {
                 e.preventDefault();
                 alert(PRIVATE_MODE_MESSAGE);
-            });
-        } else {
-            btn.addEventListener('click', checkIncognitoAndStart);
+            };
         }
     });
 
