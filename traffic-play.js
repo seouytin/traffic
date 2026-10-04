@@ -23,8 +23,8 @@
     function copyToClipboard(text, alertElement) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text).then(() => {
-                alertElement.style.setProperty('display', 'block', 'important');
-                setTimeout(() => { alertElement.style.setProperty('display', 'none', 'important'); }, 1500);
+                alertElement.classList.add('show');
+                setTimeout(() => { alertElement.classList.remove('show'); }, 1400);
             });
         } else {
             const textArea = document.createElement("textarea");
@@ -35,8 +35,8 @@
             textArea.select();
             try {
                 document.execCommand('copy');
-                alertElement.style.setProperty('display', 'block', 'important');
-                setTimeout(() => { alertElement.style.setProperty('display', 'none', 'important'); }, 1500);
+                alertElement.classList.add('show');
+                setTimeout(() => { alertElement.classList.remove('show'); }, 1400);
             } catch (err) {
                 alert("Không thể sao chép. Trình duyệt không hỗ trợ.");
             }
@@ -203,7 +203,10 @@
                     <path d="M8 5v14l11-7z"/>
                 </svg>
             </span>
-            <div id="copy-alert-${CONTAINER_ID}">Đã sao chép mã!</div>
+            <div id="copy-alert-${CONTAINER_ID}">
+                <svg style="width: 13px !important; height: 13px !important; fill: #34d399 !important; display: block !important;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Đã sao chép
+            </div>
         </span>
     `;
 
