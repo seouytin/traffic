@@ -71,7 +71,7 @@
     style.textContent = `
         .custom-button-${CONTAINER_ID} {
         box-sizing: border-box !important;
-        background: radial-gradient(circle at 50% 30%, #FF5252 0%, #E60000 65%, #B30000 100%) !important;
+        background: radial-gradient(circle at 50% 20%, #FF6B6B 0%, #EE0000 55%, #990000 100%) !important;
         border: 2px solid rgb(177, 0, 14) !important;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
         color: #fff !important;
