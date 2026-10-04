@@ -11,7 +11,7 @@
     const SCROLL_STOP_DELAY = 35000; 
     const SCROLL_ALERT_MESSAGE = 'Vui lòng thực hiện thao tác cuộn để tiếp tục đếm ngược thời gian!';
     const REF_DOMAIN_LIST = ["google.com","google.ad","google.ae","google.com.af","google.com.ag","google.com.ai","google.al","google.am","google.co.ao","google.com.ar","google.as","google.at","google.com.au","google.az","google.ba","google.com.bd","google.be","google.bf","google.bg","google.com.bh","google.bi","google.bj","google.com.bn","google.com.bo","google.com.br","google.bs","google.bt","google.co.bw","google.by","google.com.bz","google.ca","google.cd","google.cf","google.cg","google.ch","google.ci","google.co.ck","google.cl","google.cm","google.cn","google.com.co","google.co.cr","google.com.cu","google.cv","google.com.cy","google.cz","google.de","google.dj","google.dk","google.dm","google.com.do","google.dz","google.com.ec","google.ee","google.com.eg","google.es","google.com.et","google.fi","google.com.fj","google.fm","google.fr","google.ga","google.ge","google.gg","google.com.gh","google.com.gi","google.gl","google.gm","google.gr","google.com.gt","google.gy","google.com.hk","google.hn","google.hr","google.ht","google.hu","google.co.id","google.ie","google.co.il","google.im","google.co.in","google.iq","google.is","google.it","google.je","google.com.jm","google.jo","google.co.jp","google.co.ke","google.com.kh","google.ki","google.kg","google.co.kr","google.com.kw","google.kz","google.la","google.com.lb","google.li","google.lk","google.co.ls","google.lt","google.lu","google.lv","google.com.ly","google.co.ma","google.md","google.me","google.mg","google.mk","google.ml","google.com.mm","google.mn","google.ms","google.com.mt","google.mu","google.mv","google.mw","google.com.mx","google.com.my","google.co.mz","google.com.na","google.com.ng","google.com.ni","google.ne","google.nl","google.no","google.com.np","google.nr","google.nu","google.co.nz","google.com.om","google.com.pa","google.com.pe","google.com.pg","google.com.ph","google.com.pk","google.pl","google.pn","google.com.pr","google.ps","google.pt","google.com.py","google.com.qa","google.ro","google.ru","google.rw","google.com.sa","google.com.sb","google.sc","google.se","google.com.sg","google.sh","google.si","google.sk","google.com.sl","google.sn","google.so","google.sm","google.sr","google.st","google.com.sv","google.td","google.tg","google.co.th","google.com.tj","google.tl","google.tm","google.tn","google.to","google.com.tr","google.tt","google.com.tw","google.co.tz","google.com.ua","google.co.ug","google.co.uk","google.com.uy","google.co.uz","google.com.vc","google.co.ve","google.vg","google.co.vi","google.com.vn","google.vu","google.ws","google.rs","google.co.za","google.co.zm","google.co.zw","google.cat"];
-    const PRIVATE_MODE_MESSAGE = 'Vui lòng tắt chế độ ẩn danh để tiếp tục!';
+    const PRIVATE_MODE_MESSAGE = 'Vui lòng tắt chế độ ẩn danh';
     const BASE_COLOR = '#EE2F2E'; 
      
     function getRandomPassCode() {
@@ -322,8 +322,8 @@
 
     function checkIncognitoAndStart() {
         if (incognitoChecked && counting) return;
-        detectIncognito().then((isPrivate) => {
-            if (isPrivate) {
+        detectIncognito().then((result) => {
+            if (result.isPrivate) {
                 alert(PRIVATE_MODE_MESSAGE);
             } else {
                 incognitoChecked = true; 
@@ -334,40 +334,51 @@
 
     btn.addEventListener('click', checkIncognitoAndStart);
 
-    // Cập nhật hàm phát hiện ẩn danh mới nhất dựa trên Storage quota & File System API
-    const detectIncognito = function() {
-        return new Promise(function(resolve) {
-            let isPrivate = false;
-
-            // Kiểm tra Safari Private Mode
-            if (window.webkitRequestFileSystem) {
-                window.webkitRequestFileSystem(window.TEMPORARY, 1, function() {
-                    // Normal mode
-                    resolve(false);
-                }, function() {
-                    // Private mode trong Chrome/Safari cũ
-                    resolve(true);
-                });
-                return;
+    const detectIncognito = function () {
+        return new Promise(function (resolve) {
+            var browserName = "Unknown";
+            function __callback(isPrivate) { resolve({ isPrivate: isPrivate, browserName: browserName }); }
+            function identifyChromium() {
+                var ua = navigator.userAgent;
+                if (ua.match(/Chrome/)) {
+                    if (navigator.brave !== undefined) return "Brave";
+                    else if (ua.match(/Edg/)) return "Edge";
+                    else if (ua.match(/OPR/)) return "Opera";
+                    return "Chrome";
+                } else return "Chromium";
             }
-
-            // Kiểm tra các trình duyệt hiện đại qua StorageManager quota
-            if (navigator.storage && navigator.storage.estimate) {
-                navigator.storage.estimate().then(function(estimate) {
-                    // Trong chế độ ẩn danh, hạn mức bộ nhớ (quota) thường bị giới hạn nhỏ hơn đáng kể hoặc cách tính khác biệt
-                    const quota = estimate.quota;
-                    // Kiểm tra dung lượng quota bất thường dưới mức 120MB (đặc trưng của ẩn danh trên một số trình duyệt)
-                    if (quota && quota < 120 * 1024 * 1024) {
-                        isPrivate = true;
-                    }
-                    resolve(isPrivate);
-                }).catch(function() {
-                    resolve(false);
-                });
-            } else {
-                // Fallback mặc định cho phép chạy nếu không check được
-                resolve(false);
+            function assertEvalToString(value) { return value === eval.toString().length; }
+            function isSafari() { var v = navigator.vendor; return (v !== undefined && v.indexOf("Apple") === 0 && assertEvalToString(37)); }
+            function isChrome() { var v = navigator.vendor; return (v !== undefined && v.indexOf("Google") === 0 && assertEvalToString(33)); }
+            function isFirefox() { return (document.documentElement !== undefined && document.documentElement.style.MozAppearance !== undefined && assertEvalToString(37)); }
+            function isMSIE() { return (navigator.msSaveBlob !== undefined && assertEvalToString(39)); }
+            function newSafariTest() {
+                var tmp_name = String(Math.random());
+                try {
+                    var db = window.indexedDB.open(tmp_name, 1);
+                    db.onupgradeneeded = function (i) {
+                        var _a, _b;
+                        var res = (_a = i.target) === null || _a === void 0 ? void 0 : _a.result;
+                        try { res.createObjectStore("test", { autoIncrement: true }).put(new Blob); __callback(false); } 
+                        catch (e) { var message = e; if (e instanceof Error) message = (_b = e.message) !== null && _b !== void 0 ? _b : e; if (typeof message !== 'string') return __callback(false); var matchesExpectedError = /BlobURLs are not yet supported/.test(message); return __callback(matchesExpectedError); } 
+                        finally { res.close(); window.indexedDB.deleteDatabase(tmp_name); }
+                    };
+                } catch (e) { return __callback(false); }
             }
+            function oldSafariTest() {
+                var openDB = window.openDatabase; var storage = window.localStorage;
+                try { openDB(null, null, null, null); } catch (e) { return __callback(true); }
+                try { storage.setItem("test", "1"); storage.removeItem("test"); } catch (e) { return __callback(true); }
+                return __callback(false);
+            }
+            function main() {
+                if (isSafari()) { browserName = 'Safari'; if (navigator.maxTouchPoints !== undefined) newSafariTest(); else oldSafariTest(); }
+                else if (isChrome()) { browserName = identifyChromium(); if (self.Promise !== undefined && self.Promise.allSettled !== undefined) { navigator.webkitTemporaryStorage.queryUsageAndQuota(function (_, quota) { var quotaInMib = Math.round(quota / (1024 * 1024)); var quotaLimitInMib = Math.round((performance.memory ? performance.memory.jsHeapSizeLimit : 1073741824) / (1024 * 1024)) * 2; __callback(quotaInMib < quotaLimitInMib); }, function () { resolve({isPrivate: false}); }); } else { var fs = window.webkitRequestFileSystem; fs(0, 1, function () { __callback(false); }, function () { __callback(true); }); } }
+                else if (isFirefox()) { browserName = "Firefox"; __callback(navigator.serviceWorker === undefined); }
+                else if (isMSIE()) { browserName = "Internet Explorer"; __callback(window.indexedDB === undefined); }
+                else __callback(false);
+            }
+            main();
         });
     };
 })();
