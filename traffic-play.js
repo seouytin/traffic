@@ -106,20 +106,23 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        .custom-button-${CONTAINER_ID}.alert-state,
-        .custom-button-${CONTAINER_ID}.finished-state {
-            border-radius: 50px !important;
+        .custom-button-${CONTAINER_ID}.alert-state {
+            border-radius: 6px !important;
             width: auto !important;
-            height: 44px !important;          /* Chiều cao chuẩn ôm sát, không bị quá cao */
+            height: auto !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 0 18px !important;       /* Khoảng cách đệm gọn gàng hệt nút mẫu */
-            font-size: 18px !important;       /* Cỡ chữ cân đối vừa vặn */
-            line-height: normal !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 6px !important;
+            padding: 8px 16px !important;
+            font-size: 20px !important;
+        }
+        .custom-button-${CONTAINER_ID}.finished-state {
+            border-radius: 6px !important;
+            width: auto !important;
+            height: auto !important;
+            max-width: none !important;
+            max-height: none !important;
+            padding: 8px 16px !important;
+            font-size: 20px !important;
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
@@ -164,24 +167,22 @@
             transform: translateX(-50%) translateY(0) !important;
         }
         #scroll-alert-${CONTAINER_ID} {
-            position: absolute !important;
-            bottom: calc(100% + 12px) !important;
+            position: fixed !important;
+            top: 50% !important;
             left: 50% !important;
-            transform: translateX(-50%) translateY(4px) !important;
-            background: rgba(20, 20, 20, 0.92) !important;
-            backdrop-filter: blur(8px) !important;
-            -webkit-backdrop-filter: blur(8px) !important;
-            color: #f3f4f6 !important; 
-            font-weight: 500 !important;
-            font-size: 12px !important;
-            letter-spacing: -0.01em !important;
-            border-radius: 6px !important;
+            transform: translate(-50%, -50%) !important;
+            padding: 15px 25px !important;
+            background: rgba(238, 47, 46, 0.98) !important;
+            color: #ffffff !important; 
+            font-weight: 700 !important;
+            font-size: 16px !important;
+            border-radius: 10px !important;
             text-align: center !important;
-            white-space: nowrap !important;
-            padding: 6px 12px !important;
+            line-height: 1.5 !important;
             z-index: 99999 !important;
             display: none;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5) !important;
+            animation: border-pulse-${CONTAINER_ID} 1s infinite alternate !important; 
         }
         @keyframes border-pulse-${CONTAINER_ID} {
             0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0), 0 0 5px rgba(238, 47, 46, 0.8); }
