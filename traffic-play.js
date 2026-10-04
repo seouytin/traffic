@@ -138,32 +138,29 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        #copy-alert-${CONTAINER_ID} {
-            position: absolute !important;
-            bottom: 130% !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            background: #4CAF50 !important; 
-            color: white !important;
-            padding: 6px 14px !important;
-            border-radius: 5px !important;
-            display: none !important;
-            z-index: 99999 !important;
-            font-weight: bold !important;
-            font-size: 14px !important;
-            white-space: nowrap !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+        function copyToClipboard(text, alertElement) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                alertElement.classList.add('show');
+                setTimeout(() => { alertElement.classList.remove('show'); }, 1400);
+            });
+        } else {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alertElement.classList.add('show');
+                setTimeout(() => { alertElement.classList.remove('show'); }, 1400);
+            } catch (err) {
+                alert("Không thể sao chép. Trình duyệt không hỗ trợ.");
+            }
+            document.body.removeChild(textArea);
         }
-        #copy-alert-${CONTAINER_ID}::after {
-            content: "" !important;
-            position: absolute !important;
-            top: 100% !important;
-            left: 50% !important;
-            margin-left: -6px !important;
-            border-width: 6px !important;
-            border-style: solid !important;
-            border-color: #4CAF50 transparent transparent transparent !important;
-        }
+    }
         #scroll-alert-${CONTAINER_ID} {
             position: fixed !important;
             top: 50% !important;
