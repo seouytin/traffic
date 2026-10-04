@@ -120,6 +120,8 @@
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
+            opacity: 0.6 !important;
+            filter: grayscale(30%) !important;
         }
         .custom-button-${CONTAINER_ID} span {
             box-sizing: border-box !important;
@@ -360,18 +362,18 @@
         });
     };
 
-    // [TỐI ƯU CỰC KỲ QUAN TRỌNG]: Khi bấm vào nút, bắt buộc chạy kiểm tra ẩn danh trực tiếp ngay lập tức
+    // Gán sự kiện click cho nút
     btn.onclick = function() {
         detectIncognito().then((result) => {
             if (result.isPrivate) {
-                alert(PRIVATE_MODE_MESSAGE); // Hiện bảng thông báo ẩn danh đúng chuẩn
+                alert(PRIVATE_MODE_MESSAGE); // Hiển thị thông báo khi click ở chế độ ẩn danh
             } else {
-                startCountdown(); // Chạy đếm ngược nếu ở tab thường
+                startCountdown(); // Chạy đếm ngược ở tab thường
             }
         });
     };
 
-    // Kiểm tra sẵn trạng thái ẩn danh khi vừa load trang để áp dụng giao diện nếu cần
+    // Kiểm tra ngay khi vừa load trang để áp dụng hiệu ứng vô hiệu hóa nếu đang ở tab ẩn danh
     detectIncognito().then((result) => {
         if (result.isPrivate) {
             btn.classList.add('disabled-state');
