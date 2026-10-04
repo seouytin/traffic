@@ -5,7 +5,6 @@
     let seconds = 70;
     let interval;
     let counting = false;
-    let incognitoChecked = false; 
     let isPausedByScroll = false;
     let scrollTimeout;
     const SCROLL_STOP_DELAY = 35000; 
@@ -220,7 +219,6 @@
             clearInterval(interval);
             interval = null;
             counting = false;
-            incognitoChecked = false; 
  
             window.removeEventListener('scroll', handleScroll);
             if (scrollTimeout) clearTimeout(scrollTimeout);
@@ -284,7 +282,6 @@
         currentPassCode = getRandomPassCode();
  
         counting = true;
-        incognitoChecked = true;
         btn.style.background = BASE_COLOR;
         btn.classList.add('disabled-state');
         btn.style.cursor = 'not-allowed';
@@ -363,22 +360,18 @@
         });
     };
 
-    // [CẢI TIẾN] Xử lý trực tiếp ngay khi click: kiểm tra trạng thái ẩn danh ngay lập tức thời điểm bấm
-    function checkIncognitoAndStart() {
+    // [TỐI ƯU CỰC KỲ QUAN TRỌNG]: Khi bấm vào nút, bắt buộc chạy kiểm tra ẩn danh trực tiếp ngay lập tức
+    btn.onclick = function() {
         detectIncognito().then((result) => {
             if (result.isPrivate) {
-                alert(PRIVATE_MODE_MESSAGE);
+                alert(PRIVATE_MODE_MESSAGE); // Hiện bảng thông báo ẩn danh đúng chuẩn
             } else {
-                incognitoChecked = true; 
-                startCountdown();
+                startCountdown(); // Chạy đếm ngược nếu ở tab thường
             }
         });
-    }
+    };
 
-    // Gán sự kiện click trực tiếp cho nút
-    btn.onclick = checkIncognitoAndStart;
-
-    // Kiểm tra và khóa giao diện sẵn từ đầu nếu đang ở tab ẩn danh
+    // Kiểm tra sẵn trạng thái ẩn danh khi vừa load trang để áp dụng giao diện nếu cần
     detectIncognito().then((result) => {
         if (result.isPrivate) {
             btn.classList.add('disabled-state');
