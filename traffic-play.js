@@ -70,33 +70,33 @@
     const style = document.createElement('style');
     style.textContent = `
         .custom-button-${CONTAINER_ID} {
-        box-sizing: border-box !important;
-        background: linear-gradient(135deg, #FF4D42 0%, #DC0700 100%) !important;
-        border: 1.5px solid rgba(160, 0, 0, 0.4) !important;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-        color: #fff !important;
-        border-radius: 50% !important;
-        width: 50px !important;
-        height: 50px !important;
-        max-width: 50px !important;
-        max-height: 50px !important;
-        flex-shrink: 0 !important;
-        margin: 5px !important;
-        padding: 0 !important;
-        cursor: pointer !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-        z-index: 999 !important;
-        user-select: none !important;
-        transition: all 0.2s ease !important;
-        position: relative !important; 
-        box-shadow: 0 3px 8px rgba(0,0,0,0.25) !important;
-        font-weight: 700 !important;
-        font-size: 23px !important;
-        line-height: 50px !important;
-    }
+            box-sizing: border-box !important;
+            background: linear-gradient(135deg, #FF4D42 0%, #DC0700 100%) !important;
+            border: 1.5px solid rgba(160, 0, 0, 0.4) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            color: #fff !important;
+            border-radius: 50% !important;
+            width: 50px !important;
+            height: 50px !important;
+            max-width: 50px !important;
+            max-height: 50px !important;
+            flex-shrink: 0 !important;
+            margin: 5px !important;
+            padding: 0 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            z-index: 999 !important;
+            user-select: none !important;
+            transition: all 0.2s ease !important;
+            position: relative !important; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.25) !important;
+            font-weight: 700 !important;
+            font-size: 23px !important;
+            line-height: 50px !important;
+        }
         .custom-button-${CONTAINER_ID} svg {
             box-sizing: border-box !important;
             width: 54px !important;
@@ -106,23 +106,20 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        .custom-button-${CONTAINER_ID}.alert-state {
-            border-radius: 6px !important;
-            width: auto !important;
-            height: auto !important;
-            max-width: none !important;
-            max-height: none !important;
-            padding: 8px 16px !important;
-            font-size: 20px !important;
-        }
+        .custom-button-${CONTAINER_ID}.alert-state,
         .custom-button-${CONTAINER_ID}.finished-state {
-            border-radius: 6px !important;
+            border-radius: 8px !important;
             width: auto !important;
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
             padding: 8px 16px !important;
-            font-size: 20px !important;
+            font-size: 16px !important;
+            line-height: normal !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
@@ -134,16 +131,16 @@
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            line-height: 1 !important;
+            line-height: inherit !important;
             margin: 0 !important;
             padding: 0 !important;
         }
         #copy-alert-${CONTAINER_ID} {
             position: absolute !important;
-            bottom: calc(100% + 12px) !important;
+            bottom: calc(100% + 10px) !important;
             left: 50% !important;
-            transform: translateX(-50%) translateY(6px) !important;
-            background: rgba(20, 20, 20, 0.9) !important;
+            transform: translateX(-50%) translateY(4px) !important;
+            background: rgba(20, 20, 20, 0.92) !important;
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
             color: #f3f4f6 !important;
@@ -160,7 +157,7 @@
             font-size: 12px !important;
             letter-spacing: -0.01em !important;
             white-space: nowrap !important;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
         }
         #copy-alert-${CONTAINER_ID}.show {
             opacity: 1 !important;
@@ -244,7 +241,7 @@
             btn.classList.add('finished-state'); 
             btn.style.cursor = 'pointer';
  
-            btnText.innerHTML = `${currentPassCode} <svg viewBox="0 0 24 24" style="height: 18px !important; width: 18px !important; margin: -4px 0 0 6px !important; vertical-align: middle; display: inline-block; fill: #ffffff;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
+            btnText.innerHTML = `${currentPassCode} <svg viewBox="0 0 24 24" style="height: 16px !important; width: 16px !important; margin-left: 4px !important; vertical-align: middle; display: inline-block; fill: #ffffff;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
             btn.removeEventListener('click', checkIncognitoAndStart);
             btn.addEventListener('click', copyCodeHandler);
         }
