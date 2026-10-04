@@ -98,8 +98,8 @@
     }
         .custom-button-${CONTAINER_ID} svg {
             box-sizing: border-box !important;
-            width: 53px !important;
-            height: 53px !important;
+            width: 54px !important;
+            height: 54px !important;
             fill: #ffffff !important;
             display: block !important;
             margin: 0 !important;
@@ -334,51 +334,38 @@
 
     btn.addEventListener('click', checkIncognitoAndStart);
 
-    // Cập nhật hàm phát hiện ẩn danh tối ưu và chính xác trên Chrome/Edge/Firefox mới nhất
+    // Sửa lại hàm detectIncognito tối ưu hóa, không bị nhận diện nhầm trên tab thường
     const detectIncognito = function () {
         return new Promise(function (resolve) {
-            // Kiểm tra thông qua Storage Quota (Đặc trưng thu hẹp bộ nhớ trong chế độ ẩn danh)
+            let isPrivate = false;
+            
+            // Kiểm tra qua bộ nhớ tạm FileSystem/Storage nếu có
             if (navigator.storage && navigator.storage.estimate) {
                 navigator.storage.estimate().then(function (estimate) {
-                    // Nếu dung lượng tối đa (quota) nhỏ hơn ngưỡng an toàn (thường < 120MB trong ẩn danh của Chromium)
+                    // Ở chế độ ẩn danh, quota thường bị giới hạn rất nhỏ (< 120MB tùy trình duyệt)
+                    // Hoặc kiểm tra qua tính năng FileSystem nếu bị vô hiệu hóa ngầm
                     if (estimate.quota && estimate.quota < 120 * 1024 * 1024) {
-                        return resolve({ isPrivate: true, browserName: "Chromium" });
+                        isPrivate = true;
                     }
-                    
-                    // Thử mở IndexedDB để kiểm tra lỗi ghi dữ liệu đặc thù của chế độ riêng tư
-                    let dbName = 'incognito_test_' + Math.random();
-                    let openReq = indexedDB.open(dbName);
-                    openReq.onerror = function () {
-                        resolve({ isPrivate: true, browserName: "IndexedDB_Error" });
-                    };
-                    openReq.onsuccess = function (e) {
-                        let db = e.target.result;
-                        try {
-                            let tx = db.transaction("as", "readwrite");
-                            resolve({ isPrivate: false, browserName: "Normal" });
-                        } catch (err) {
-                            // Chế độ ẩn danh thường chặn giao dịch ghi dữ liệu này
-                            resolve({ isPrivate: true, browserName: "IndexedDB_Tx_Error" });
-                        }
-                        db.close();
-                        try { indexedDB.deleteDatabase(dbName); } catch(ex){}
-                    };
+                    resolve({ isPrivate: isPrivate });
                 }).catch(function () {
-                    resolve({ isPrivate: false, browserName: "Error" });
+                    resolve({ isPrivate: false });
                 });
             } else {
-                // Fallback cho Firefox hoặc Safari cũ
-                let isPrivate = false;
+                // Kiểm tra dự phòng cho các trường hợp khác
                 try {
-                    if (navigator.vendor && navigator.vendor.indexOf("Apple") === 0) {
-                        window.openDatabase(null, null, null, null);
-                    } else if (typeof InstallTrigger !== 'undefined') {
-                        isPrivate = (navigator.serviceWorker === undefined);
+                    if (window.webkitRequestFileSystem) {
+                        window.webkitRequestFileSystem(0, 1, function(){
+                            resolve({ isPrivate: false });
+                        }, function(){
+                            resolve({ isPrivate: true });
+                        });
+                        return;
                     }
-                } catch (e) {
+                } catch(e) {
                     isPrivate = true;
                 }
-                resolve({ isPrivate: isPrivate, browserName: "Fallback" });
+                resolve({ isPrivate: isPrivate });
             }
         });
     };
