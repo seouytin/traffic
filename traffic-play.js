@@ -1,6 +1,7 @@
 (function() {
     const CONTAINER_ID = 'sys-action-box';
     const PASS_CODE_LIST = ['DNroBMW']; 
+    const HOVER_BRIGHTNESS = 0.95; 
     let currentPassCode = ''; 
     let seconds = 70;
     let interval;
@@ -96,14 +97,10 @@
         font-size: 23px !important;
         line-height: 50px !important;
         }
-        /* Hiệu ứng làm sậm màu khi rê chuột vào (Hover) */
         .custom-button-${CONTAINER_ID}:hover {
-            background: linear-gradient(180deg, #D93D3C 0%, #C00504 100%) !important;
-            filter: brightness(0.9) !important;
+            filter: brightness(${HOVER_BRIGHTNESS}) !important;
         }
-        /* Tránh đổi hiệu ứng sậm màu đối với nút đang trong trạng thái disabled (đếm ngược) */
         .custom-button-${CONTAINER_ID}.disabled-state:hover {
-            background: linear-gradient(180deg, #F94D4C 0%, #E00706 100%) !important;
             filter: none !important;
         }
         .custom-button-${CONTAINER_ID} svg {
