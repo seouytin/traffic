@@ -138,29 +138,34 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        function copyToClipboard(text, alertElement) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                alertElement.classList.add('show');
-                setTimeout(() => { alertElement.classList.remove('show'); }, 1400);
-            });
-        } else {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                alertElement.classList.add('show');
-                setTimeout(() => { alertElement.classList.remove('show'); }, 1400);
-            } catch (err) {
-                alert("Không thể sao chép. Trình duyệt không hỗ trợ.");
-            }
-            document.body.removeChild(textArea);
+        #copy-alert-${CONTAINER_ID} {
+            position: absolute !important;
+            bottom: calc(100% + 12px) !important;
+            left: 50% !important;
+            transform: translateX(-50%) translateY(6px) !important;
+            background: rgba(20, 20, 20, 0.9) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            color: #f3f4f6 !important;
+            padding: 6px 12px !important;
+            border-radius: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            z-index: 99999 !important;
+            font-weight: 500 !important;
+            font-size: 12px !important;
+            letter-spacing: -0.01em !important;
+            white-space: nowrap !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
         }
-    }
+        #copy-alert-${CONTAINER_ID}.show {
+            opacity: 1 !important;
+            transform: translateX(-50%) translateY(0) !important;
+        }
         #scroll-alert-${CONTAINER_ID} {
             position: fixed !important;
             top: 50% !important;
