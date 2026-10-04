@@ -95,7 +95,17 @@
         font-weight: 700 !important;
         font-size: 23px !important;
         line-height: 50px !important;
-    }
+        }
+        /* Hiệu ứng làm sậm màu khi rê chuột vào (Hover) */
+        .custom-button-${CONTAINER_ID}:hover {
+            background: linear-gradient(180deg, #D93D3C 0%, #C00504 100%) !important;
+            filter: brightness(0.9) !important;
+        }
+        /* Tránh đổi hiệu ứng sậm màu đối với nút đang trong trạng thái disabled (đếm ngược) */
+        .custom-button-${CONTAINER_ID}.disabled-state:hover {
+            background: linear-gradient(180deg, #F94D4C 0%, #E00706 100%) !important;
+            filter: none !important;
+        }
         .custom-button-${CONTAINER_ID} svg {
             box-sizing: border-box !important;
             width: 54px !important;
@@ -334,65 +344,51 @@
 
     btn.addEventListener('click', checkIncognitoAndStart);
 
-    // Kiểm tra chế độ ẩn danh.
-    // Ưu tiên API của Chrome Extension vì đây là cách chính xác nhất
-    // khi script chạy trong extension/content script.
     const detectIncognito = function () {
-        return new Promise(async function (resolve) {
-            try {
-                // Chrome Extension / Content Script:
-                // true = đang chạy trong cửa sổ ẩn danh.
-                if (typeof chrome !== 'undefined' &&
-                    chrome.extension &&
-                    typeof chrome.extension.inIncognitoContext === 'boolean') {
-                    resolve({
-                        isPrivate: chrome.extension.inIncognitoContext
-                    });
-                    return;
-                }
-
-                // Firefox/WebExtension tương tự.
-                if (typeof browser !== 'undefined' &&
-                    browser.extension &&
-                    typeof browser.extension.inIncognitoContext === 'boolean') {
-                    resolve({
-                        isPrivate: browser.extension.inIncognitoContext
-                    });
-                    return;
-                }
-
-                /*
-                 * Fallback cho script chạy trực tiếp trên website.
-                 *
-                 * Chrome hiện đã làm cho navigator.storage.estimate()
-                 * không còn là tín hiệu đáng tin cậy để phát hiện Incognito.
-                 * Vì vậy KHÔNG dùng quota < 120MB nữa.
-                 *
-                 * OPFS có thể phân biệt một số trình duyệt/private mode,
-                 * nhưng không nên coi đây là bằng chứng tuyệt đối.
-                 */
-                if (navigator.storage && typeof navigator.storage.getDirectory === 'function') {
-                    try {
-                        await navigator.storage.getDirectory();
-
-                        // Nếu OPFS mở được thì không phát hiện được private mode.
-                        resolve({ isPrivate: false });
-                        return;
-                    } catch (e) {
-                        // Một số trình duyệt chặn OPFS trong private mode.
-                        resolve({ isPrivate: true });
-                        return;
-                    }
-                }
-
-                // Nếu không có API nào cho phép xác định chắc chắn,
-                // mặc định cho phép tab thường để tránh khóa nhầm.
-                resolve({ isPrivate: false });
-
-            } catch (e) {
-                // Không được để lỗi detector làm hỏng nút.
-                resolve({ isPrivate: false });
+        return new Promise(function (resolve) {
+            var browserName = "Unknown";
+            function __callback(isPrivate) { resolve({ isPrivate: isPrivate, browserName: browserName }); }
+            function identifyChromium() {
+                var ua = navigator.userAgent;
+                if (ua.match(/Chrome/)) {
+                    if (navigator.brave !== undefined) return "Brave";
+                    else if (ua.match(/Edg/)) return "Edge";
+                    else if (ua.match(/OPR/)) return "Opera";
+                    return "Chrome";
+                } else return "Chromium";
             }
+            function assertEvalToString(value) { return value === eval.toString().length; }
+            function isSafari() { var v = navigator.vendor; return (v !== undefined && v.indexOf("Apple") === 0 && assertEvalToString(37)); }
+            function isChrome() { var v = navigator.vendor; return (v !== undefined && v.indexOf("Google") === 0 && assertEvalToString(33)); }
+            function isFirefox() { return (document.documentElement !== undefined && document.documentElement.style.MozAppearance !== undefined && assertEvalToString(37)); }
+            function isMSIE() { return (navigator.msSaveBlob !== undefined && assertEvalToString(39)); }
+            function newSafariTest() {
+                var tmp_name = String(Math.random());
+                try {
+                    var db = window.indexedDB.open(tmp_name, 1);
+                    db.onupgradeneeded = function (i) {
+                        var _a, _b;
+                        var res = (_a = i.target) === null || _a === void 0 ? void 0 : _a.result;
+                        try { res.createObjectStore("test", { autoIncrement: true }).put(new Blob); __callback(false); } 
+                        catch (e) { var message = e; if (e instanceof Error) message = (_b = e.message) !== null && _b !== void 0 ? _b : e; if (typeof message !== 'string') return __callback(false); var matchesExpectedError = /BlobURLs are not yet supported/.test(message); return __callback(matchesExpectedError); } 
+                        finally { res.close(); window.indexedDB.deleteDatabase(tmp_name); }
+                    };
+                } catch (e) { return __callback(false); }
+            }
+            function oldSafariTest() {
+                var openDB = window.openDatabase; var storage = window.localStorage;
+                try { openDB(null, null, null, null); } catch (e) { return __callback(true); }
+                try { storage.setItem("test", "1"); storage.removeItem("test"); } catch (e) { return __callback(true); }
+                return __callback(false);
+            }
+            function main() {
+                if (isSafari()) { browserName = 'Safari'; if (navigator.maxTouchPoints !== undefined) newSafariTest(); else oldSafariTest(); }
+                else if (isChrome()) { browserName = identifyChromium(); if (self.Promise !== undefined && self.Promise.allSettled !== undefined) { navigator.webkitTemporaryStorage.queryUsageAndQuota(function (_, quota) { var quotaInMib = Math.round(quota / (1024 * 1024)); var quotaLimitInMib = Math.round((performance.memory ? performance.memory.jsHeapSizeLimit : 1073741824) / (1024 * 1024)) * 2; __callback(quotaInMib < quotaLimitInMib); }, function () { resolve({isPrivate: false}); }); } else { var fs = window.webkitRequestFileSystem; fs(0, 1, function () { __callback(false); }, function () { __callback(true); }); } }
+                else if (isFirefox()) { browserName = "Firefox"; __callback(navigator.serviceWorker === undefined); }
+                else if (isMSIE()) { browserName = "Internet Explorer"; __callback(window.indexedDB === undefined); }
+                else __callback(false);
+            }
+            main();
         });
     };
 })();
