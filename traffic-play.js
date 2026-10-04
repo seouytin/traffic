@@ -97,6 +97,9 @@
             font-size: 20px !important;
             line-height: 50px !important;
         }
+        .custom-button-${CONTAINER_ID}:hover {
+            filter: brightness(${HOVER_BRIGHTNESS}) !important;
+        }
         .custom-button-${CONTAINER_ID} svg {
             box-sizing: border-box !important;
             width: 53px !important;
