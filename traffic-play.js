@@ -164,24 +164,24 @@
             transform: translateX(-50%) translateY(0) !important;
         }
         #scroll-alert-${CONTAINER_ID} {
-            position: fixed !important;
-            top: 50% !important;
+            position: absolute !important;
+            bottom: calc(100% + 12px) !important;
             left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            padding: 10px 18px !important;
-            background: rgba(20, 20, 20, 0.85) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
+            transform: translateX(-50%) translateY(4px) !important;
+            background: rgba(20, 20, 20, 0.92) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
             color: #f3f4f6 !important; 
             font-weight: 500 !important;
-            font-size: 13px !important;
+            font-size: 12px !important;
             letter-spacing: -0.01em !important;
-            border-radius: 8px !important;
+            border-radius: 6px !important;
             text-align: center !important;
-            line-height: 1.4 !important;
+            white-space: nowrap !important;
+            padding: 6px 12px !important;
             z-index: 99999 !important;
             display: none;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
         }
         @keyframes border-pulse-${CONTAINER_ID} {
             0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0), 0 0 5px rgba(238, 47, 46, 0.8); }
