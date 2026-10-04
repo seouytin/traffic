@@ -71,7 +71,7 @@
     style.textContent = `
         .custom-button-${CONTAINER_ID} {
             box-sizing: border-box !important;
-            background: linear-gradient(135deg, #E00707 0%, #FA4F4E 100%) !important;
+            background: linear-gradient(135deg, #FA4F4E 0%, #E00707 100%) !important;
             border: 1.5px solid rgb(177,0,14) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
             color: #fff !important;
@@ -106,15 +106,15 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        ..custom-button-${CONTAINER_ID}.alert-state,
+        .custom-button-${CONTAINER_ID}.alert-state,
         .custom-button-${CONTAINER_ID}.finished-state {
             border-radius: 50px !important;
             width: auto !important;
-            height: 48px !important;
+            height: 44px !important;          /* Chiều cao chuẩn ôm sát, không bị quá cao */
             max-width: none !important;
             max-height: none !important;
-            padding: 0 20px !important;
-            font-size: 18px !important;
+            padding: 0 18px !important;       /* Khoảng cách đệm gọn gàng hệt nút mẫu */
+            font-size: 18px !important;       /* Cỡ chữ cân đối vừa vặn */
             line-height: normal !important;
             display: inline-flex !important;
             align-items: center !important;
