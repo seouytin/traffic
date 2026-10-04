@@ -119,12 +119,12 @@
             font-size: 16px !important;
         }
         .custom-button-${CONTAINER_ID}.finished-state {
-            border-radius: 30px !important;
+            border-radius: 15px !important;
             width: auto !important;
-            height: auto !important;
+            height: 30px !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 0 5px !important; /* Thêm khoảng đệm trái/phải cho cân đối */
+            padding: 0 10px !important; /* Thêm khoảng đệm trái/phải cho cân đối */
             font-size: 14px !important;
             display: inline-flex !important;
             align-items: center !important;
