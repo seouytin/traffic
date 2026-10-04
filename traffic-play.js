@@ -153,8 +153,8 @@
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
             color: #f3f4f6 !important;
-            padding: 5px 10px !important;
-            border-radius: 15px !important;
+            padding: 4px 10px !important; /* Giảm padding trên/dưới xuống 4px */
+            border-radius: 20px !important;
             display: flex !important;
             align-items: center !important;
             gap: 6px !important;
@@ -164,6 +164,7 @@
             z-index: 99999 !important;
             font-weight: 500 !important;
             font-size: 12px !important;
+            line-height: normal !important; /* Giúp khung ôm sát chiều cao chữ */
             letter-spacing: -0.01em !important;
             white-space: nowrap !important;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
