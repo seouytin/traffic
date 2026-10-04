@@ -70,52 +70,51 @@
     const style = document.createElement('style');
     style.textContent = `
         .custom-button-${CONTAINER_ID} {
-            box-sizing: border-box !important;
-            /* Đồng bộ hiệu ứng màu nền giống nút chuẩn phía dưới */
-            background: radial-gradient(circle at 50% 30%, #ff5252 0%, #e60000 60%, #b30000 100%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-            color: #fff !important;
-            border-radius: 50% !important;
-            width: 50px !important;
-            height: 50px !important;
-            max-width: 50px !important;
-            max-height: 50px !important;
-            flex-shrink: 0 !important;
-            margin: 5px !important;
-            padding: 0 !important;
-            cursor: pointer !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-align: center !important;
-            z-index: 999 !important;
-            user-select: none !important;
-            transition: all 0.2s ease !important;
-            position: relative !important; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
-            font-weight: 700 !important;
-            font-size: 16px !important;
-            line-height: normal !important;
-        }
-        .custom-button-${CONTAINER_ID}:hover {
-            filter: brightness(${HOVER_BRIGHTNESS}) !important;
-        }
-        .custom-button-${CONTAINER_ID}.disabled-state:hover {
-            filter: none !important;
-        }
+        box-sizing: border-box !important;
+        background: linear-gradient(180deg, #F94D4C 0%, #E00706 100%) !important;
+        border: 2px solid rgb(177, 0, 14) !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        color: #fff !important;
+        border-radius: 50% !important;
+        width: 50px !important;
+        height: 50px !important;
+        max-width: 50px !important;
+        max-height: 50px !important;
+        flex-shrink: 0 !important;
+        margin: 5px !important;
+        padding: 0 !important;
+        cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        z-index: 999 !important;
+        user-select: none !important;
+        transition: all 0.2s ease !important;
+        position: relative !important; 
+        box-shadow: 0 3px 8px rgba(0,0,0,0.25) !important;
+        font-weight: 700 !important;
+        font-size: 23px !important;
+        line-height: 50px !important;
+    }
         .custom-button-${CONTAINER_ID} svg {
             box-sizing: border-box !important;
-            width: 24px !important;
-            height: 24px !important;
+            width: 54px !important;
+            height: 54px !important;
             fill: #ffffff !important;
             display: block !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
             padding: 0 !important;
-            /* Dịch nhẹ sang phải một xíu để icon Play có thị giác nằm chính xác tâm nút tròn */
-            transform: translateX(1.5px) !important;
         }
-        .custom-button-${CONTAINER_ID}.alert-state,
+        .custom-button-${CONTAINER_ID}.alert-state {
+            border-radius: 6px !important;
+            width: auto !important;
+            height: auto !important;
+            max-width: none !important;
+            max-height: none !important;
+            padding: 8px 16px !important;
+            font-size: 20px !important;
+        }
         .custom-button-${CONTAINER_ID}.finished-state {
             border-radius: 6px !important;
             width: auto !important;
@@ -123,7 +122,7 @@
             max-width: none !important;
             max-height: none !important;
             padding: 8px 16px !important;
-            font-size: 18px !important;
+            font-size: 20px !important;
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
