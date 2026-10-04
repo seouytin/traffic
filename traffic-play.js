@@ -124,8 +124,11 @@
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 1px 1px !important;
+            padding: 0 16px !important; /* Thêm khoảng đệm trái/phải cho cân đối */
             font-size: 16px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
@@ -174,18 +177,20 @@
             top: 50% !important;
             left: 50% !important;
             transform: translate(-50%, -50%) !important;
-            padding: 5px 15px !important;
-            background: rgba(238, 47, 46, 0.98) !important;
-            color: #ffffff !important; 
-            font-weight: 700 !important;
-            font-size: 16px !important;
-            border-radius: 10px !important;
+            padding: 8px 16px !important;
+            background: rgba(20, 20, 20, 0.92) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            color: #f3f4f6 !important; 
+            font-weight: 500 !important;
+            font-size: 13px !important;
+            border-radius: 20px !important;
             text-align: center !important;
-            line-height: 1.5 !important;
+            line-height: 1.4 !important;
+            white-space: nowrap !important;
             z-index: 99999 !important;
             display: none;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5) !important;
-            animation: border-pulse-${CONTAINER_ID} 1s infinite alternate !important; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
         }
         @keyframes border-pulse-${CONTAINER_ID} {
             0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0), 0 0 5px rgba(238, 47, 46, 0.8); }
@@ -247,7 +252,7 @@
             btn.classList.add('finished-state'); 
             btn.style.cursor = 'pointer';
  
-            btnText.innerHTML = `${currentPassCode} <svg viewBox="0 0 24 24" style="height: 16px !important; width: 16px !important; margin-left: 4px !important; vertical-align: middle; display: inline-block; fill: #ffffff;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
+            btnText.innerHTML = `<span style="display: inline-flex; align-items: center; gap: 8px; width: 100%; justify-content: center;">${currentPassCode} <svg viewBox="0 0 24 24" style="height: 16px !important; width: 16px !important; vertical-align: middle; display: inline-block; fill: #ffffff; flex-shrink: 0;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></span>`;
             btn.removeEventListener('click', checkIncognitoAndStart);
             btn.addEventListener('click', copyCodeHandler);
         }
