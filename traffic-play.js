@@ -144,7 +144,7 @@
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
             color: #f3f4f6 !important;
-            padding: 6px 12px !important;
+            padding: 3px 8px !important;
             border-radius: 6px !important;
             display: flex !important;
             align-items: center !important;
