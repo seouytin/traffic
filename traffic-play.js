@@ -168,18 +168,20 @@
             top: 50% !important;
             left: 50% !important;
             transform: translate(-50%, -50%) !important;
-            padding: 15px 25px !important;
-            background: rgba(238, 47, 46, 0.98) !important;
-            color: #ffffff !important; 
-            font-weight: 700 !important;
-            font-size: 16px !important;
-            border-radius: 10px !important;
+            padding: 10px 18px !important;
+            background: rgba(20, 20, 20, 0.85) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            color: #f3f4f6 !important; 
+            font-weight: 500 !important;
+            font-size: 13px !important;
+            letter-spacing: -0.01em !important;
+            border-radius: 8px !important;
             text-align: center !important;
-            line-height: 1.5 !important;
+            line-height: 1.4 !important;
             z-index: 99999 !important;
             display: none;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5) !important;
-            animation: border-pulse-${CONTAINER_ID} 1s infinite alternate !important; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
         }
         @keyframes border-pulse-${CONTAINER_ID} {
             0% { box-shadow: 0 0 0px rgba(255, 255, 255, 0), 0 0 5px rgba(238, 47, 46, 0.8); }
