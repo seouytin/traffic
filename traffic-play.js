@@ -107,22 +107,22 @@
             padding: 0 !important;
         }
         .custom-button-${CONTAINER_ID}.alert-state {
-            border-radius: 15px !important;
+            border-radius: 30px !important;
             width: auto !important;
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 8px 16px !important;
-            font-size: 18px !important;
+            padding: 1px 1px !important;
+            font-size: 16px !important;
         }
         .custom-button-${CONTAINER_ID}.finished-state {
-            border-radius: 15px !important;
+            border-radius: 30px !important;
             width: auto !important;
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
-            padding: 8px 16px !important;
-            font-size: 18px !important;
+            padding: 1px 1px !important;
+            font-size: 16px !important;
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
