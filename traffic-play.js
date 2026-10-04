@@ -334,48 +334,46 @@
 
     btn.addEventListener('click', checkIncognitoAndStart);
 
+    // Cập nhật hàm phát hiện ẩn danh tối ưu và chính xác trên Chrome/Edge/Firefox mới nhất
     const detectIncognito = function () {
         return new Promise(function (resolve) {
-            // Thử nghiệm lưu trữ localStorage/IndexedDB hiện đại chống ẩn danh bị chặn quota
-            if ('storage' in navigator && 'estimate' in navigator.storage) {
+            // Kiểm tra thông qua Storage Quota (Đặc trưng thu hẹp bộ nhớ trong chế độ ẩn danh)
+            if (navigator.storage && navigator.storage.estimate) {
                 navigator.storage.estimate().then(function (estimate) {
-                    // Nếu dung lượng tối đa (quota) quá nhỏ bất thường trên Chrome/Brave/Edge ẩn danh
-                    if (estimate.quota < 120 * 1024 * 1024) {
-                        resolve({ isPrivate: true, browserName: "Chromium" });
-                        return;
+                    // Nếu dung lượng tối đa (quota) nhỏ hơn ngưỡng an toàn (thường < 120MB trong ẩn danh của Chromium)
+                    if (estimate.quota && estimate.quota < 120 * 1024 * 1024) {
+                        return resolve({ isPrivate: true, browserName: "Chromium" });
                     }
-                    // Kiểm tra thử nghiệm IndexedDB
-                    try {
-                        let dbName = 'test_incognito_' + Math.random();
-                        let request = indexedDB.open(dbName);
-                        request.onerror = function () {
-                            resolve({ isPrivate: true, browserName: "Unknown" });
-                        };
-                        request.onsuccess = function (e) {
-                            let db = e.target.result;
-                            db.close();
-                            indexedDB.deleteDatabase(dbName);
-                            resolve({ isPrivate: false, browserName: "Unknown" });
-                        };
-                    } catch (err) {
-                        resolve({ isPrivate: true, browserName: "Unknown" });
-                    }
+                    
+                    // Thử mở IndexedDB để kiểm tra lỗi ghi dữ liệu đặc thù của chế độ riêng tư
+                    let dbName = 'incognito_test_' + Math.random();
+                    let openReq = indexedDB.open(dbName);
+                    openReq.onerror = function () {
+                        resolve({ isPrivate: true, browserName: "IndexedDB_Error" });
+                    };
+                    openReq.onsuccess = function (e) {
+                        let db = e.target.result;
+                        try {
+                            let tx = db.transaction("as", "readwrite");
+                            resolve({ isPrivate: false, browserName: "Normal" });
+                        } catch (err) {
+                            // Chế độ ẩn danh thường chặn giao dịch ghi dữ liệu này
+                            resolve({ isPrivate: true, browserName: "IndexedDB_Tx_Error" });
+                        }
+                        db.close();
+                        try { indexedDB.deleteDatabase(dbName); } catch(ex){}
+                    };
                 }).catch(function () {
-                    resolve({ isPrivate: false, browserName: "Unknown" });
+                    resolve({ isPrivate: false, browserName: "Error" });
                 });
             } else {
-                // Fallback cho Firefox / Safari / Các trình duyệt cũ
+                // Fallback cho Firefox hoặc Safari cũ
                 let isPrivate = false;
                 try {
                     if (navigator.vendor && navigator.vendor.indexOf("Apple") === 0) {
-                        // Safari check
-                        let openDB = window.openDatabase;
-                        if (!openDB) {
-                            isPrivate = true;
-                        }
+                        window.openDatabase(null, null, null, null);
                     } else if (typeof InstallTrigger !== 'undefined') {
-                        // Firefox check
-                        isPrivate = navigator.serviceWorker === undefined;
+                        isPrivate = (navigator.serviceWorker === undefined);
                     }
                 } catch (e) {
                     isPrivate = true;
