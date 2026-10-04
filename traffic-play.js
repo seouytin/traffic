@@ -363,17 +363,25 @@
         });
     };
 
-    // Gán mặc định chạy bình thường trước
+    // [CẢI TIẾN] Xử lý trực tiếp ngay khi click: kiểm tra trạng thái ẩn danh ngay lập tức thời điểm bấm
+    function checkIncognitoAndStart() {
+        detectIncognito().then((result) => {
+            if (result.isPrivate) {
+                alert(PRIVATE_MODE_MESSAGE);
+            } else {
+                incognitoChecked = true; 
+                startCountdown();
+            }
+        });
+    }
+
+    // Gán sự kiện click trực tiếp cho nút
     btn.onclick = checkIncognitoAndStart;
 
-    // Kiểm tra ẩn danh ngay lập tức và ghi đè sự kiện onclick nếu là tab ẩn danh
+    // Kiểm tra và khóa giao diện sẵn từ đầu nếu đang ở tab ẩn danh
     detectIncognito().then((result) => {
         if (result.isPrivate) {
             btn.classList.add('disabled-state');
-            btn.onclick = function(e) {
-                e.preventDefault();
-                alert(PRIVATE_MODE_MESSAGE);
-            };
         }
     });
 
