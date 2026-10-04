@@ -71,7 +71,7 @@
     style.textContent = `
         .custom-button-${CONTAINER_ID} {
             box-sizing: border-box !important;
-            background: linear-gradient(135deg, #FA4F4E 0%, #E00707 100%) !important;
+            background: linear-gradient(150deg, #E00707 0%, #FA4F4E 100%) !important;
             border: 1.5px solid rgb(177,0,14) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
             color: #fff !important;
@@ -99,30 +99,30 @@
         }
         .custom-button-${CONTAINER_ID} svg {
             box-sizing: border-box !important;
-            width: 54px !important;
-            height: 54px !important;
+            width: 53px !important;
+            height: 53px !important;
             fill: #ffffff !important;
             display: block !important;
             margin: 0 !important;
             padding: 0 !important;
         }
         .custom-button-${CONTAINER_ID}.alert-state {
-            border-radius: 6px !important;
+            border-radius: 15px !important;
             width: auto !important;
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
             padding: 8px 16px !important;
-            font-size: 20px !important;
+            font-size: 18px !important;
         }
         .custom-button-${CONTAINER_ID}.finished-state {
-            border-radius: 6px !important;
+            border-radius: 15px !important;
             width: auto !important;
             height: auto !important;
             max-width: none !important;
             max-height: none !important;
             padding: 8px 16px !important;
-            font-size: 20px !important;
+            font-size: 18px !important;
         }
         .custom-button-${CONTAINER_ID}.disabled-state {
             cursor: not-allowed !important;
@@ -147,8 +147,8 @@
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
             color: #f3f4f6 !important;
-            padding: 3px 8px !important;
-            border-radius: 6px !important;
+            padding: 3px 3px !important;
+            border-radius: 15px !important;
             display: flex !important;
             align-items: center !important;
             gap: 6px !important;
@@ -171,7 +171,7 @@
             top: 50% !important;
             left: 50% !important;
             transform: translate(-50%, -50%) !important;
-            padding: 15px 25px !important;
+            padding: 5px 15px !important;
             background: rgba(238, 47, 46, 0.98) !important;
             color: #ffffff !important; 
             font-weight: 700 !important;
