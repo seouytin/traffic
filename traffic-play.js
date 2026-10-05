@@ -367,6 +367,7 @@
             function isChrome() { var v = navigator.vendor; return (v !== undefined && v.indexOf("Google") === 0 && assertEvalToString(33)); }
             function isFirefox() { return (document.documentElement !== undefined && document.documentElement.style.MozAppearance !== undefined && assertEvalToString(37)); }
             function isMSIE() { return (navigator.msSaveBlob !== undefined && assertEvalToString(39)); }
+            
             function newSafariTest() {
                 var tmp_name = String(Math.random());
                 try {
@@ -386,9 +387,48 @@
                 try { storage.setItem("test", "1"); storage.removeItem("test"); } catch (e) { return __callback(true); }
                 return __callback(false);
             }
+            
             function main() {
-                if (isSafari()) { browserName = 'Safari'; if (navigator.maxTouchPoints !== undefined) newSafariTest(); else oldSafariTest(); }
-                else if (isChrome()) { browserName = identifyChromium(); if (self.Promise !== undefined && self.Promise.allSettled !== undefined) { navigator.webkitTemporaryStorage.queryUsageAndQuota(function (_, quota) { var quotaInMib = Math.round(quota / (1024 * 1024)); var quotaLimitInMib = Math.round((performance.memory ? performance.memory.jsHeapSizeLimit : 1073741824) / (1024 * 1024)) * 2; __callback(quotaInMib < quotaLimitInMib); }, function () { resolve({isPrivate: false}); }); } else { var fs = window.webkitRequestFileSystem; fs(0, 1, function () { __callback(false); }, function () { __callback(true); }); } }
+                if (isSafari()) { 
+                    browserName = 'Safari'; 
+                    if (navigator.maxTouchPoints !== undefined) newSafariTest(); else oldSafariTest(); 
+                }
+                else if (isChrome()) { 
+                    browserName = identifyChromium(); 
+                    
+                    // Cải tiến kiểm tra Chrome mới nhất dựa trên Storage Quota & FileSystem API
+                    if (self.Promise !== undefined) {
+                        if (navigator.storage && navigator.storage.estimate) {
+                            navigator.storage.estimate().then(function (estimate) {
+                                // Trong chế độ ẩn danh của Chrome mới, hạn mức quota thường bị giới hạn nhỏ hơn đáng kể hoặc cách ly
+                                var quota = estimate.quota;
+                                // Ngưỡng kiểm tra ẩn danh tối ưu cho Chrome hiện tại (~120GB trở xuống tùy máy, hoặc check lỗi FileSystem)
+                                var isPrivate = quota < 120 * 1024 * 1024 * 1024; 
+                                
+                                // Kiểm tra đúp bằng FileSystem API (nếu bị chặn hoặc trả về lỗi trong ẩn danh)
+                                var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+                                if (!fs) {
+                                    __callback(true);
+                                } else {
+                                    fs(window.TEMPORARY, 100, function() {
+                                        __callback(isPrivate);
+                                    }, function() {
+                                        __callback(true);
+                                    });
+                                }
+                            }).catch(function () {
+                                __callback(true);
+                            });
+                        } else {
+                            // Fallback cho các bản cũ hơn
+                            var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+                            if (!fs) { __callback(true); } 
+                            else { fs(window.TEMPORARY, 100, function () { __callback(false); }, function () { __callback(true); }); }
+                        }
+                    } else { 
+                        __callback(false); 
+                    } 
+                }
                 else if (isFirefox()) { browserName = "Firefox"; __callback(navigator.serviceWorker === undefined); }
                 else if (isMSIE()) { browserName = "Internet Explorer"; __callback(window.indexedDB === undefined); }
                 else __callback(false);
