@@ -336,15 +336,9 @@
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     function checkIncognitoAndStart() {
-        if (incognitoChecked && counting) return;
-        detectIncognito().then((result) => {
-            if (result.isPrivate) {
-                alert(PRIVATE_MODE_MESSAGE);
-            } else {
-                incognitoChecked = true; 
-                startCountdown();
-            }
-        });
+        if (counting) return;
+        incognitoChecked = true; 
+        startCountdown();
     }
 
     btn.addEventListener('click', checkIncognitoAndStart);
